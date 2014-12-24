@@ -1,8 +1,11 @@
 apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'signing'
 
 sourceCompatibility = 1.7
 version = '1.0'
-group = "io.github.amrhassan"
+group = "io.github.amrhassan.graphique.client"
+archivesBaseName = "graphique-client"
 
 repositories {
     mavenLocal()
@@ -19,9 +22,56 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.destinationDir
 }
 
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
 dependencies {
     compile 'com.google.guava:guava:18.0'
     compile 'org.apache.httpcomponents:httpclient:4.3.6'
     compile 'org.javatuples:javatuples:1.2'
     testCompile "junit:junit:4.11"
+}
+
+uploadArchives {
+
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'Graphique Client'
+                packaging 'jar'
+                description 'A JVM client for Graphique'
+                url 'https://github.com/amrhassan/graphique-client-java/'
+
+                licenses {
+                    license {
+                        name 'MIT'
+                        url 'http://opensource.org/licenses/MIT'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'amrhassan'
+                        name 'Amr Hassan'
+                        email 'amr.hassan@gmail.com'
+                    }
+                }
+            }
+        }
+    }
 }
