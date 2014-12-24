@@ -4,7 +4,7 @@ apply plugin: 'signing'
 
 sourceCompatibility = 1.7
 version = '1.0'
-group = "io.github.amrhassan.graphique.client"
+group = "io.github.amrhassan"
 archivesBaseName = "graphique-client"
 
 repositories {
@@ -56,6 +56,10 @@ uploadArchives {
                 packaging 'jar'
                 description 'A JVM client for Graphique'
                 url 'https://github.com/amrhassan/graphique-client-java/'
+
+                scm {
+                    url 'https://github.com/amrhassan/graphique'
+                }
 
                 licenses {
                     license {
