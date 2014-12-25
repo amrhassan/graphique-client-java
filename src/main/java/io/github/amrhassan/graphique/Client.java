@@ -1,11 +1,13 @@
 package io.github.amrhassan.graphique;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -33,20 +35,23 @@ public final class Client {
   /**
    * Submits an image to the server.
    *
-   * @param inputStream
+   * @param imageContent the image content in raw bytes
    * @return
    * @throws InvalidImageError when the submitted image content is not a valid image
    * @throws ServerError
    * @throws IOError
    */
-  public Image submitImage(InputStream inputStream) {
+  public Image submitImage(byte[] imageContent) {
+
+    if (imageContent.length == 0)
+      throw new InvalidImageError();
 
     final String uri = String.format("http://%s:%d/images", hostname, port);
 
     try (final CloseableHttpClient client = HttpClients.createDefault()) {
 
       final HttpPost request = new HttpPost(uri);
-      request.setEntity(new InputStreamEntity(inputStream));
+      request.setEntity(new ByteArrayEntity(imageContent));
 
       try (CloseableHttpResponse response = client.execute(request)) {
 
@@ -68,8 +73,21 @@ public final class Client {
     }
   }
 
-  public Image submitImage(byte[] imageContent) {
-    return submitImage(new ByteArrayInputStream(imageContent));
+  /**
+   * Submits an image to the server.
+   *
+   * @param inputStream image content as a stream of raw bytes
+   * @return
+   * @throws InvalidImageError when the submitted image content is not a valid image
+   * @throws ServerError
+   * @throws IOError
+   */
+  public Image submitImage(InputStream inputStream) {
+    try {
+      return submitImage(IOUtils.toByteArray(inputStream));
+    } catch (IOException e) {
+      throw new IOError(e);
+    }
   }
 
   /**
