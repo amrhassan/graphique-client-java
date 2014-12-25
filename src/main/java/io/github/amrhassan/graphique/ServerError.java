@@ -1,9 +1,8 @@
 package io.github.amrhassan.graphique;
 
-import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
-import org.apache.http.util.TextUtils;
 
 import java.io.IOError;
 import java.io.IOException;
@@ -19,7 +18,7 @@ public class ServerError extends GraphiqueError {
 
   private static String readBody(HttpResponse response) throws IOError {
     try {
-      return String.join("\n", IOUtils.readLines(response.getEntity().getContent()));
+      return StringUtils.join(IOUtils.readLines(response.getEntity().getContent()), "\n");
     } catch (IOException e) {
       throw new IOError(e);
     }
