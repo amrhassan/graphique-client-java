@@ -1,5 +1,6 @@
 package io.github.amrhassan.graphique;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPatch;
@@ -56,7 +57,7 @@ public final class Client {
         else if (statusCode == HttpStatus.SC_BAD_REQUEST)
           throw new InvalidImageError();
         else if (statusCode == HttpStatus.SC_INTERNAL_SERVER_ERROR)
-          throw new ServerError();
+          throw ServerError.forResponse(response);
         else
           throw new RuntimeException("Unexpected response: " + statusCode);
       }
@@ -92,16 +93,16 @@ public final class Client {
 
       final HttpPatch request = new HttpPatch(uri);
 
-      try (CloseableHttpResponse resposne = client.execute(request)) {
+      try (CloseableHttpResponse response = client.execute(request)) {
 
-        final int statusCode = resposne.getStatusLine().getStatusCode();
+        final int statusCode = response.getStatusLine().getStatusCode();
 
         if (statusCode == HttpStatus.SC_OK)
           return;
         else if (statusCode == HttpStatus.SC_NOT_FOUND)
           throw new ImageNotFoundError();
         else if (statusCode == HttpStatus.SC_INTERNAL_SERVER_ERROR)
-          throw new ServerError();
+          throw ServerError.forResponse(response);
         else
           throw new RuntimeException("Unexpected response: " + statusCode);
       }

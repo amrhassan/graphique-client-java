@@ -33,6 +33,7 @@ signing {
 dependencies {
     compile 'com.google.guava:guava:18.0'
     compile 'org.apache.httpcomponents:httpclient:4.3.6'
+    compile 'commons-io:commons-io:2.4'
     compile 'org.javatuples:javatuples:1.2'
     testCompile "junit:junit:4.11"
 }
