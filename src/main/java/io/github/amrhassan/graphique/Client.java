@@ -59,7 +59,8 @@ public final class Client {
         else if (statusCode == HttpStatus.SC_INTERNAL_SERVER_ERROR)
           throw ServerError.forResponse(response);
         else
-          throw new RuntimeException("Unexpected response: " + statusCode);
+          throw new RuntimeException("Unexpected response. Request was:\n" +
+              HttpUtils.toString(request) + "\n\nResponse was: " + HttpUtils.toString(response));
       }
 
     } catch (IOException e) {
@@ -104,7 +105,8 @@ public final class Client {
         else if (statusCode == HttpStatus.SC_INTERNAL_SERVER_ERROR)
           throw ServerError.forResponse(response);
         else
-          throw new RuntimeException("Unexpected response: " + statusCode);
+          throw new RuntimeException("Unexpected response. Request was:\n" +
+              HttpUtils.toString(request) + "\n\nResponse was: " + HttpUtils.toString(response));
       }
     } catch (IOException e) {
       throw new IOError(e);
