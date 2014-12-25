@@ -51,12 +51,14 @@ public final class Client {
 
         final int statusCode = response.getStatusLine().getStatusCode();
 
-        if (statusCode == HttpStatus.SC_BAD_REQUEST)
+        if (statusCode == HttpStatus.SC_CREATED)
+          return Image.fromLocation(response.getHeaders("Location")[0].getValue());
+        else if (statusCode == HttpStatus.SC_BAD_REQUEST)
           throw new InvalidImageError();
-        else if (statusCode != HttpStatus.SC_CREATED)
+        else if (statusCode == HttpStatus.SC_INTERNAL_SERVER_ERROR)
           throw new ServerError();
-
-        return Image.fromLocation(response.getHeaders("Location")[0].getValue());
+        else
+          throw new RuntimeException("Unexpected response: " + statusCode);
       }
 
     } catch (IOException e) {
@@ -94,10 +96,14 @@ public final class Client {
 
         final int statusCode = resposne.getStatusLine().getStatusCode();
 
-        if (statusCode == HttpStatus.SC_NOT_FOUND)
+        if (statusCode == HttpStatus.SC_OK)
+          return;
+        else if (statusCode == HttpStatus.SC_NOT_FOUND)
           throw new ImageNotFoundError();
-        else if (statusCode != HttpStatus.SC_OK)
+        else if (statusCode == HttpStatus.SC_INTERNAL_SERVER_ERROR)
           throw new ServerError();
+        else
+          throw new RuntimeException("Unexpected response: " + statusCode);
       }
     } catch (IOException e) {
       throw new IOError(e);
