@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/amrhassan/graphique-client-java.svg)](https://travis-ci.org/amrhassan/graphique-client-java)
+
 Java Client for [Graphique](https://amrhassan.github.io/graphique)
 =========================
 
