@@ -1,10 +1,7 @@
-[![Build Status](https://travis-ci.org/amrhassan/graphique-client-java.svg)](https://travis-ci.org/amrhassan/graphique-client-java)
+[![Build Status](https://travis-ci.org/amrhassan/graphique-client-java.svg)](https://travis-ci.org/amrhassan/graphique-client-java) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.amrhassan/graphique-client/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/io.github.amrhassan/graphique-client)
 
 Java Client for [Graphique](https://amrhassan.github.io/graphique)
 =========================
-
-### Get from Maven Central ###
-Check out the available releases at [The Central Repository](http://search.maven.org/#search|ga|1|a%3A%22graphique-client%22%20g%3A%22io.github.amrhassan%22).
 
 ### Usage ####
 
