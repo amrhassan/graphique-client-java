@@ -27,7 +27,7 @@ System.out.println(image.servableUrl());
 Image variant = Image.taggedWith("137a07962e49a58b6161ace95bb1b07d.jpg")
     .sizedWithin(500, 400).formattedToJpeg(0.75);
 client.create(image);
-System.out.println(image.servableUrl());
+System.out.println(variant.servableUrl());
 ```
 
 **Directly Obtaining a Servable URL for an Image**
@@ -36,5 +36,5 @@ System.out.println(image.servableUrl());
 // publicly-servable URL directly without making an explicit request to the server.
 Image variant = Image.taggedWith("137a07962e49a58b6161ace95bb1b07d.jpg")
     .sizedWithin(500, 400).formattedToJpeg(0.75);
-System.out.println(image.servableUrl());
+System.out.println(variant.servableUrl());
 ```
