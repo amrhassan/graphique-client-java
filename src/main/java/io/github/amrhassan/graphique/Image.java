@@ -59,13 +59,6 @@ public class Image {
     return new Image(tag, sizeWithin, Optional.of("png"));
   }
 
-  /**
-   * Returns a mutation of Image with a request to format the image to JPEG.
-   */
-  public Image formattedToJpeg() {
-    return new Image(tag, sizeWithin, Optional.of("jpeg"));
-  }
-
   static Image fromLocation(String location) {
     final String tag = location.substring(location.lastIndexOf('/') + 1);
     return Image.taggedWith(tag);
@@ -110,7 +103,7 @@ public class Image {
     if (sizeWithin.isPresent())
       sizeAttribute = String.format("size-within=%dx%d", sizeWithin.get().toArray());
 
-    String formatAttribute = format.or("");
+    String formatAttribute = format.or("").toUpperCase();
 
     return DigestUtils.md5Hex(formatAttribute + sizeAttribute);
   }
@@ -124,8 +117,18 @@ public class Image {
       return tag;
     else {
       final String extensionlessTag = tag.substring(0, tag.lastIndexOf('.'));
-      final String tagExtension = tag.substring(tag.lastIndexOf('.'));
-      return extensionlessTag + "-" + hashedAttributes() + tagExtension;
+      return extensionlessTag + "-" + hashedAttributes() + targetFileNameExtension();
     }
+  }
+
+  private String targetFileNameExtension() {
+    if (!format.isPresent())
+      return tag.substring(tag.lastIndexOf('.'));
+    else if (format.get().startsWith("jpeg"))
+      return ".jpg";
+    else if (format.get().startsWith("png"))
+      return ".png";
+    else
+      throw new RuntimeException("Target file name extension unaccounted for!");
   }
 }
